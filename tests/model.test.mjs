@@ -1,21 +1,3 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
-import { cleanLines } from '../web/model.mjs';
-test('trims, removes blanks and preserves first-seen order', () => {
-  assert.deepEqual(cleanLines('  Halifax\nLangley\nHalifax\n\nVancouver  '), {
-    text: 'Halifax\nLangley\nVancouver', count: 3, removed: 1,
-  });
-});
-test('supports Windows and old Mac line endings', () => {
-  assert.equal(cleanLines('a\r\nb\ra').text, 'a\nb');
-});
-test('empty text and whitespace produce an empty result', () => {
-  assert.deepEqual(cleanLines(' \n\t'), { text: '', count: 0, removed: 0 });
-});
-test('preserves case and Unicode', () => {
-  assert.equal(cleanLines('Québec\nquébec\n東京\nQuébec').text, 'Québec\nquébec\n東京');
-});
-test('treats markup as ordinary text', () => {
-  assert.equal(cleanLines('<script>alert(1)</script>\n<script>alert(1)</script>').text, '<script>alert(1)</script>');
-});
-test('rejects non-text input', () => { assert.throws(() => cleanLines(null), TypeError); });
+import test from 'node:test';import assert from 'node:assert/strict';import {previousText,changes,archiveLink,displayStamp} from '../web/model.mjs';
+test('Service comparison uses earlier reviewed samples',()=>{const d={'2001':{text:{mentions:['email']}},'2002':{},'2003':{text:{mentions:['telnet']}}};assert.equal(previousText(d,'2001'),null);assert.deepEqual(changes(d['2003'].text.mentions,previousText(d,'2003').mentions),{added:['telnet'],removed:['email']});});
+test('Preserve the complete replay address and UTC timestamp',()=>{assert.equal(archiveLink(['20000502030405','http://vcn.bc.ca:80/']),'https://web.archive.org/web/20000502030405/http://vcn.bc.ca:80/');assert.equal(displayStamp('20000502030405'),'2000-05-02 03:04 UTC');});

@@ -1,16 +1,49 @@
 {
-  "id": "coolcode-tool-template",
-  "title": "CoolCode Tool Starter",
-  "description": "A browser-only example that trims lines and removes exact duplicates.",
-  "category": "security",
-  "tags": ["text", "lines", "duplicates"],
-  "icon": "scan-search",
-  "url": "/coolcode-tool-template/",
-  "source": "https://github.com/jsdyer/coolcode-tool-template",
+  "id": "freenet-echo",
+  "title": "FreeNet Echo",
+  "description": "Compare archived homepages and documented services of community networks in Halifax, Vancouver and Ottawa.",
+  "category": "media",
+  "tags": [
+    "Canada",
+    "community networks",
+    "Halifax",
+    "Vancouver",
+    "Ottawa",
+    "FreeNet"
+  ],
+  "icon": "history",
+  "url": "/freenet-echo/",
+  "source": "https://github.com/jsdyer/freenet-echo",
   "hosting": "project",
   "access": "browser",
   "data_info": {
-    "mode": "local",
-    "detail": "The browser reads the text you paste and compares its lines."
+    "mode": "snapshot",
+    "detail": "Internet Archive capture metadata and the networks’ own histories document homepages, services and milestones.",
+    "cadence": "Monthly",
+    "probes": [
+      {
+        "url": "https://coolcode.ca/freenet-echo/data/status.json",
+        "label": "Source retrieved",
+        "path": [
+          "retrieved"
+        ],
+        "count_at": {
+          "path": [
+            "count"
+          ],
+          "unit": "indexed captures"
+        }
+      },
+      {
+        "url": "https://coolcode.ca/freenet-echo/data/status.json",
+        "label": "Capture dates",
+        "path": [
+          "start"
+        ],
+        "end_path": [
+          "end"
+        ]
+      }
+    ]
   }
 }
