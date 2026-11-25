@@ -6,12 +6,15 @@ on:
   schedule:
     - cron: '41 10 9 * *'
   workflow_dispatch:
+concurrency:
+  group: source-and-pages-${{ github.ref }}
+  cancel-in-progress: false
 permissions:
   contents: read
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 25
     permissions:
       contents: write
     outputs:
@@ -19,7 +22,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          persist-credentials: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+          ref: ${{ github.ref == 'refs/heads/main' && 'main' || github.sha }}
+          persist-credentials: ${{ github.ref == 'refs/heads/main' }}
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
@@ -27,8 +31,22 @@ jobs:
         with:
           node-version: '24'
       - name: Retrieve and validate the current source edition
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         run: python scripts/refresh.py
+      - name: Seed newly configured source indexes
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        id: seed
+        run: |
+          python3 - <<'PYCODE'
+          import json, os, subprocess
+          config = json.load(open('web/config.json'))
+          data = json.load(open('web/data/captures.json'))
+          missing = [n['id'] for n in config['networks'] if n['id'] not in data]
+          if missing:
+              subprocess.run(['python3', 'scripts/refresh.py', '--new-only'], check=True)
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+                  output.write('changed=true\n')
+          PYCODE
       - name: Test the application
         run: node --test tests/*.test.mjs
       - name: Test the builder
@@ -54,9 +72,9 @@ jobs:
       - name: Check application in a browser
         run: python3 tests/browser_smoke.py
       - name: Save tested source snapshot
-        if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || steps.seed.outputs.changed == 'true')
         run: |
-          git add -u
+          git add web/data/
           if ! git diff --cached --quiet; then
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'

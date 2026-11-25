@@ -36,6 +36,14 @@ def main():
                 page.select_option('#year','1996')
                 assert 'No indexed capture' in page.locator('#cards').inner_text()
                 assert 'web.archive.org/web/' in page.locator('#cards a').first.get_attribute('href')
+                page.fill('#network-search','Sympatico')
+                assert page.locator('#directory article').count()==1
+                page.locator('#directory button').click()
+                assert page.locator('#left').input_value()=='sympatico'
+                assert 'Sympatico' in page.locator('#cards').inner_text()
+                page.fill('#host','https://chebucto.ns.ca/a')
+                page.click('#other-domain button')
+                assert 'domain=chebucto.ns.ca' in page.locator('#custom-result a').first.get_attribute('href')
                 page.select_option('#year','2000')
                 page.screenshot(path=str(screenshots / "desktop.png"), full_page=True)
                 page.set_viewport_size({"width": 390, "height": 844})

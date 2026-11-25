@@ -1,7 +1,7 @@
 {
   "id": "freenet-echo",
   "title": "FreeNet Echo",
-  "description": "Compare archived homepages and documented services of community networks in Halifax, Vancouver and Ottawa.",
+  "description": "Explore Canada\u2019s early community networks and ISP portals through dated homepage captures, service traces and documented milestones.",
   "category": "media",
   "tags": [
     "Canada",
@@ -9,7 +9,12 @@
     "Halifax",
     "Vancouver",
     "Ottawa",
-    "FreeNet"
+    "FreeNet",
+    "Sympatico",
+    "Shaw @Home",
+    "Victoria",
+    "Toronto",
+    "dial-up"
   ],
   "icon": "history",
   "url": "/freenet-echo/",
@@ -18,7 +23,7 @@
   "access": "browser",
   "data_info": {
     "mode": "snapshot",
-    "detail": "Internet Archive capture metadata and the networks’ own histories document homepages, services and milestones.",
+    "detail": "Internet Archive homepage indexes and cited historical sources; community networks plus bounded early ISP eras.",
     "cadence": "Monthly",
     "probes": [
       {

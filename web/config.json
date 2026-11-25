@@ -1,0 +1,175 @@
+{
+  "networks": [
+    {
+      "id": "halifax",
+      "name": "Chebucto Community Net",
+      "city": "Halifax",
+      "kind": "Community network",
+      "homepages": [
+        "www.chebucto.ns.ca/"
+      ],
+      "context": "A community-run doorway to email, information and the early web in Halifax.",
+      "source": "https://chebucto.ns.ca/Chebucto/Membership/history.html",
+      "history": [
+        [
+          "1993",
+          "Organizers began meeting at the Halifax Library."
+        ],
+        [
+          "1994-06-16",
+          "Chebucto opened to the public."
+        ]
+      ]
+    },
+    {
+      "id": "vancouver",
+      "name": "Vancouver Community Network",
+      "city": "Vancouver",
+      "kind": "Community network",
+      "homepages": [
+        "www.vcn.bc.ca/",
+        "www2.vcn.bc.ca/"
+      ],
+      "context": "Vancouver FreeNet evolved into VCN, preserving a community focus through the move from dial-up to the web.",
+      "source": "https://www.vcn.bc.ca/volnet/int.htm",
+      "history": [
+        [
+          "1993",
+          "The organization began as Vancouver FreeNet."
+        ],
+        [
+          "1994",
+          "VCN began offering online services."
+        ],
+        [
+          "1996",
+          "By this year VCN had moved to a web-based information system and offered community web hosting."
+        ]
+      ]
+    },
+    {
+      "id": "ottawa",
+      "name": "National Capital FreeNet",
+      "city": "Ottawa",
+      "kind": "Community network",
+      "homepages": [
+        "www.ncf.ca/",
+        "www.ncf.carleton.ca/",
+        "www.ncf.ca/en/"
+      ],
+      "context": "A Carleton University organizing project became a public community network in the national capital.",
+      "source": "https://www.ncf.ca/ncf/freeport2html/papers/history.html",
+      "history": [
+        [
+          "1991-11",
+          "The organizing project began at Carleton University."
+        ],
+        [
+          "1992-09",
+          "Donated modems and communications equipment connected the Ottawa Public Library."
+        ],
+        [
+          "1993-02-01",
+          "The public opening took place at the regional headquarters in Ottawa."
+        ]
+      ]
+    },
+    {
+      "id": "victoria",
+      "name": "Victoria Free-Net",
+      "city": "Victoria",
+      "kind": "Community network",
+      "homepages": [
+        "freenet.victoria.bc.ca/vifa.html",
+        "www.victoria.tc.ca/"
+      ],
+      "context": "The 1995 Canadian community-network directory documents public dial-up, telnet, gopher and web addresses in Victoria.",
+      "source": "https://www.ncf.ca/ncf/freeport2html/conferences/com-net94/directories.html",
+      "history": [
+        [
+          "1995-05-06",
+          "Listed in the Canadian Community Networks Directory with a web address at freenet.victoria.bc.ca/vifa.html."
+        ]
+      ]
+    },
+    {
+      "id": "toronto",
+      "name": "Toronto Free-Net",
+      "city": "Toronto",
+      "kind": "Community network",
+      "homepages": [
+        "www.torfree.net/"
+      ],
+      "context": "The contemporary directory records donated equipment, institutional support and thousands of activated accounts.",
+      "source": "https://www.ncf.ca/ncf/freeport2html/conferences/com-net94/directories.html",
+      "history": [
+        [
+          "1994-11-03",
+          "Operational by this date, according to the 1995 Canadian Community Networks Directory."
+        ],
+        [
+          "1994-12-29",
+          "The directory records approximately 14,000 activated accounts by this date."
+        ]
+      ]
+    },
+    {
+      "id": "sympatico",
+      "name": "Sympatico",
+      "city": "Canada",
+      "kind": "Commercial ISP / portal",
+      "homepages": [
+        "www.sympatico.ca/",
+        "sympatico.msn.ca/"
+      ],
+      "from_year": 1995,
+      "to_year": 2005,
+      "context": "A commercial counterpart to the FreeNets: an ISP portal combining access, email, news and web directories. This collection stops at 2005 to focus on its early era.",
+      "source": "https://www.sec.gov/Archives/edgar/data/718940/000120621206000030/m30365e40vf.htm",
+      "history": [
+        [
+          "2004-06-09",
+          "Bell launched Sympatico.MSN.ca with Microsoft, combining the two portals, according to BCE\u2019s 2005 annual filing."
+        ]
+      ]
+    },
+    {
+      "id": "shaw",
+      "name": "Shaw / Shaw @Home era",
+      "city": "Western Canada",
+      "kind": "Commercial ISP / portal",
+      "homepages": [
+        "www.shaw.ca/",
+        "www.shaw.home.com/"
+      ],
+      "from_year": 1996,
+      "to_year": 2001,
+      "context": "Explore the early cable-internet era through Shaw\u2019s archived homepages. A company homepage is not proof that a particular product was offered on that capture date. This collection stops at 2001.",
+      "source": "https://www.sec.gov/Archives/edgar/data/932872/000113031904000436/o13418e6vk.htm",
+      "history": [
+        [
+          "1996-11-12",
+          "Shaw says it launched high-speed Internet service in Calgary on this date."
+        ],
+        [
+          "1998-11-24",
+          "A CRTC hearing described Shaw @Home as the Shaw-branded @Home service.",
+          "https://crtc.gc.ca/eng/transcripts/1998/tb1124.htm"
+        ]
+      ]
+    }
+  ],
+  "sample_years": [
+    1996,
+    1998,
+    2000,
+    2001,
+    2004,
+    2005,
+    2010,
+    2015,
+    2020,
+    2025
+  ],
+  "max_capture_rows": 50000
+}
