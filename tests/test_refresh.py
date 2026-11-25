@@ -6,6 +6,13 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 import refresh
 
 class RefreshTests(unittest.TestCase):
+ def test_configuration_is_expandable_and_rejects_unsafe_sources(self):
+  config=refresh.configuration()
+  self.assertGreaterEqual(len(config['networks']),7)
+  with tempfile.TemporaryDirectory() as td:
+   path=Path(td)/'config.json';copy_config=copy.deepcopy(config);extra=copy.deepcopy(config['networks'][0]);extra['id']='another';copy_config['networks'].append(extra);path.write_text(json.dumps(copy_config));self.assertEqual(len(refresh.configuration(path)['networks']),len(config['networks'])+1)
+   copy_config['networks'][-1]['source']='javascript:alert(1)';path.write_text(json.dumps(copy_config))
+   with self.assertRaises(ValueError):refresh.configuration(path)
  def test_schema_host_and_row_limit(self):
   header=['timestamp','original','digest']
   rows=[header,['20000102030405','http://example.ca/','A'],['20000102030405','http://evil.ca/','B']]

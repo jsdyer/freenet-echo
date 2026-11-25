@@ -39,12 +39,18 @@ def configuration(path=ROOT/'web/config.json'):
     for net in config['networks']:
         if not re.fullmatch(r'[a-z0-9-]+',net['id']) or net['id'] in seen:raise ValueError('Duplicate or invalid network')
         seen.add(net['id'])
+        for key in ['name','city','kind','context','source']:
+            if not isinstance(net.get(key),str) or not net[key].strip():raise ValueError('Missing network '+key)
+        source=urlsplit(net['source'])
+        if source.scheme!='https' or not source.hostname or source.username or source.password:raise ValueError('Use an HTTPS historical source')
+        if not isinstance(net.get('history'),list):raise ValueError('Missing historical milestones')
         if not net.get('homepages'):raise ValueError('Missing homepages')
         for site in net['homepages']:
             p=urlsplit('https://'+site)
             if not p.hostname or p.username or p.password or p.query or p.fragment or p.port:raise ValueError('Invalid homepage')
         for field in ['from_year','to_year']:
             if field in net and (type(net[field]) is not int or not 1990<=net[field]<=2100):raise ValueError('Invalid year')
+    if not isinstance(config.get('sample_years'),list) or not all(type(y) is int and 1990<=y<=2100 for y in config['sample_years']):raise ValueError('Invalid sample years')
     if not 1<=config['max_capture_rows']<=100000:raise ValueError('Invalid row limit')
     return config
 

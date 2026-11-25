@@ -1,10 +1,10 @@
 import {$,el,num,select,load,fail,link} from './ui.mjs';
 import {networkIndex,nearestCapture,normalizeHost,archiveLink,displayStamp,previousText,changes} from './model.mjs';
-let captures={},years=[],NETWORKS={};
+let captures={},years=[],NETWORKS={},sourceStatus={},completeDate=null;
 function card(id,year){
  const net=NETWORKS[id],records=captures[id]||{},yearly=records[year],box=el('article',undefined,'card');
  box.append(el('p',net.city+' · '+year,'meta'),el('h2',net.name));
- box.append(el('p',net.kind+' · '+net.context,'quiet'));
+ box.append(el('p',net.kind+' · '+net.context,'quiet'),el('p',sourceDate(id),'meta'));
  if(!yearly){box.append(el('p',Object.keys(records).length?'No indexed capture for this year.':'This homepage index has not been retrieved successfully yet. The source may be unavailable; this does not mean no captures exist.'));box.append(link('Browse the archive calendar','https://web.archive.org/web/*/'+net.homepages[0]));return box;}
  box.append(el('p',num(yearly.count)+' captures','metric'),el('p',num(yearly.versions)+' distinct archived content digests'));
  const links=el('p');links.append(link('First · '+displayStamp(yearly.first[0]),archiveLink(yearly.first)));
@@ -38,12 +38,12 @@ function render(){
  const url=new URL(location.href);for(const id of ['left','right','year'])url.searchParams.set(id,$(id).value);history.replaceState(null,'',url);
 }
 async function start(){
- const [data,s,cfg]=await Promise.all([load('captures'),load('status'),fetch('./config.json').then(r=>{if(!r.ok)throw Error('Configuration unavailable');return r.json();})]);captures=data;NETWORKS=networkIndex(cfg);
+ const [data,s,cfg]=await Promise.all([load('captures'),load('status'),fetch('./config.json').then(r=>{if(!r.ok)throw Error('Configuration unavailable');return r.json();})]);captures=data;NETWORKS=networkIndex(cfg);sourceStatus=s.sources||{};completeDate=s.retrieved;
  years=[...new Set(Object.values(data).flatMap(x=>Object.keys(x)))].sort();
  for(const id of ['left','right'])select(id,Object.entries(NETWORKS).map(([id,n])=>[id,n.city+' · '+n.name]));
  select('year',years.map(y=>[y,y]));const q=new URLSearchParams(location.search);
  $('left').value=Object.hasOwn(NETWORKS,q.get('left'))?q.get('left'):'halifax';$('right').value=Object.hasOwn(NETWORKS,q.get('right'))?q.get('right'):'vancouver';$('year').value=years.includes(q.get('year'))?q.get('year'):years.includes('2000')?'2000':years.at(-1);
- $('status').textContent=num(s.count)+' indexed captures · '+s.start+' – '+s.end+' · '+s.samples+' homepage text samples · Retrieved '+s.retrieved;
+ $('status').textContent=num(s.count)+' indexed captures · '+s.start+' – '+s.end+' · '+s.samples+' homepage text samples · Complete collection refreshed '+s.retrieved;
  for(const id of ['left','right','year'])$(id).onchange=render;render();renderDirectory();$('network-search').oninput=renderDirectory;$('kind').onchange=renderDirectory;
 }
 start().catch(fail);
@@ -53,7 +53,7 @@ function renderDirectory(){
  const entries=Object.entries(NETWORKS).filter(([id,n])=>(!kind||n.kind===kind)&&[n.name,n.city,n.context,...n.homepages].join(' ').toLowerCase().includes(query));
  $('directory-count').textContent=entries.length+' networks and portals';
  $('directory').replaceChildren(...entries.map(([id,n])=>{
-  const a=el('article',undefined,'card');a.append(el('p',n.kind,'meta'),el('h3',n.name),el('p',n.city),el('p',n.context));
+  const a=el('article',undefined,'card');a.append(el('p',n.kind,'meta'),el('h3',n.name),el('p',n.city),el('p',n.context),el('p',sourceDate(id),'meta'));
   const records=captures[id]||{},first=Object.values(records).map(x=>x.first).sort((a,b)=>a[0].localeCompare(b[0]))[0];
   if(first)a.append(link('Earliest indexed capture · '+displayStamp(first[0]),archiveLink(first)));
   else a.append(el('p','Index unavailable in this edition.','quiet'),link('Browse archived homepage','https://web.archive.org/web/*/'+n.homepages[0]));
@@ -61,3 +61,10 @@ function renderDirectory(){
  }));
 }
 $('other-domain').onsubmit=e=>{e.preventDefault();try{const host=normalizeHost($('host').value);$('custom-result').replaceChildren(link('Trace '+host+' in Domain Biography','https://coolcode.ca/domain-biography/?domain='+encodeURIComponent(host)),' · ',link('Browse its archived homepage','https://web.archive.org/web/*/'+host+'/'));}catch(error){$('custom-result').textContent=error.message;}};
+
+function sourceDate(id){
+ const source=sourceStatus[id];
+ if(source?.retrieved)return 'Index retrieved '+source.retrieved.slice(0,10)+(source.state==='unavailable'?' · latest check unavailable':'');
+ if(captures[id])return 'Index retrieved '+completeDate;
+ return source?.checked_at?'Last attempted '+source.checked_at.slice(0,10)+' · index unavailable':'Index not yet collected';
+}

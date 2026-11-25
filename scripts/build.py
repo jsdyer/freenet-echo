@@ -42,6 +42,8 @@ def metadata(root=ROOT):
 
 def build(root=ROOT):
     tool = metadata(root)
+    from refresh import configuration
+    configuration(root / 'web/config.json')
     output = root / "dist"
     if output.is_symlink():
         raise ValueError("dist must not be a symlink")
